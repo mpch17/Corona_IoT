@@ -11,7 +11,7 @@
 
 // Returns error conn instance with error message.
 #define ERR_CONN(msg, len) ({ \
-    conn c = {.error = 1, .error_msg = malloc(len)}; \
+    conn c = {.error = 1, .error_msg = (char *) malloc(len)}; \
     sprintf(c.error_msg, "%s\0", msg); \
     c; \
 })
@@ -47,7 +47,7 @@ conn endpoint_init(char *ip, unsigned short port, short endpoint_type)
 
     if (endpoint_type == CLIENT && ip != NULL)
     {
-        connection.ip = malloc(strlen(ip) + 1);
+        connection.ip = (char *) malloc(strlen(ip) + 1);
         strcpy(connection.ip, ip);
     }
 
@@ -101,7 +101,7 @@ ssize_t conn_read(conn connection, void *buffer, size_t len)
 }
 
 // Closes connection.
-void conn_close(conn *restrict connection)
+void conn_close(conn *RESTRICT connection)
 {
 #ifdef DEBUG
     printf("Closing %d...\n", connection->fd);
