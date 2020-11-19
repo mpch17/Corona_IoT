@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <arpa/inet.h>
 
 #define ERR_MSG_LEN 50
 
@@ -28,7 +29,7 @@ conn conn_listen(conn server_conn)
     int opt = 1;
     conn connection;
 
-    else if (listen(server_conn.fd, 10) < 0)
+    if (listen(server_conn.fd, 10) < 0)
         return ERR_CONN("Failed listening", ERR_MSG_LEN);
 
     else if ((connection.fd = accept(server_conn.fd, (struct sockaddr *) &addr, (socklen_t *) &addr_len)) < 0)
@@ -42,6 +43,7 @@ conn endpoint_init(char *ip, unsigned short port, short endpoint_type)
 {
     struct sockaddr_in address;
     conn connection = {.port = port};
+    int opt = 1;
 
     if (endpoint_type == CLIENT && ip != NULL)
     {
@@ -62,7 +64,7 @@ conn endpoint_init(char *ip, unsigned short port, short endpoint_type)
     {
         address.sin_addr.s_addr = INADDR_ANY;
 
-        if (bind(connection.fd, (struct sockaddr *) &addr, sizeof(addr)) < 0)
+        if (bind(connection.fd, (struct sockaddr *) &address, sizeof(address)) < 0)
             return ERR_CONN("Failed binding", ERR_MSG_LEN);
     }
 
