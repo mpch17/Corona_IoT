@@ -11,8 +11,10 @@ struct camera_env
     } dimension;
 
     uint32_t people_count;
+    uint64_t id;
 };
 
 void load_camera_data(struct camera_env *restrict camera);
+char *camera_env_to_json(struct camera_env ce);
 
 #endif
