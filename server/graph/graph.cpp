@@ -2,9 +2,5 @@
 
 namespace corona
 {
-    // Constructor,
-    graph::graph()
-    {
 
-    }
 }

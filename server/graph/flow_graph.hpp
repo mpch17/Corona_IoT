@@ -8,7 +8,7 @@ namespace corona
     class flow_graph : public graph
     {
 
-    }
+    };
 }
 
 #endif
