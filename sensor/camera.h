@@ -17,6 +17,7 @@ struct camera_env
 
     uint32_t people_count;
     uint64_t id;
+    uint64_t edge_end1, edge_end2;
 };
 
 void load_camera_data(struct camera_env *restrict camera);
