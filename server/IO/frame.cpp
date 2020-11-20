@@ -3,13 +3,6 @@
 
 namespace corona
 {
-    // TODO: Later.
-    // Constructor.
-    frame::frame()
-    {
-
-    }
-
     // Adds node to graph.
     void frame::add_node(const node& n) noexcept
     {

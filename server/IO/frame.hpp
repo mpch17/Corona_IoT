@@ -20,7 +20,6 @@ namespace corona
         short find_node(const node& n) const noexcept;
 
     public:
-        frame();
         void add_node(const node& n) noexcept;
         std::string to_string() const noexcept;
         void create_edge(const node& n1, const node& n2) throw();
