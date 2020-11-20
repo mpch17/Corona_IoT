@@ -64,11 +64,28 @@ namespace corona
     }
 
     // Returns row of graph adjacency matrix.
+    bool frame::has_edge(const node& n1, const node& n2) const throw()
+    {
+        short n1_idx = find_node(n1), n2_idx = find_node(n2);
+
+        if (n1_idx < 0 || n2_idx < 0)
+            throw std::invalid_argument("No nodes with longitude and latitude found.");
+
+        return this->graph[n1_idx][n2_idx] == 1;
+    }
+
+    // Accesses a row in adjacency matrix (graph).
     const std::vector<unsigned short>& frame::operator[](unsigned i) const throw()
     {
         if (i >= this->graph.size())
-            throw std::invalid_argument("Index out of bounds on graph.");
+            throw std::invalid_argument("Index out of bound for graph.");
 
         return this->graph[i];
+    }
+
+    // Adds row to graph matrix (adjacency matrix).
+    void frame::add_row(const std::vector<unsigned short>& row)
+    {
+        throw std::runtime_error("Operation not supported.");
     }
 }

@@ -3,14 +3,13 @@
 
 #include "matrix.hpp"
 #include "node.hpp"
-#include <vector>
 #include <string>
 
 namespace corona
 {
     // Data frame class.
     // Abstract version of Pandas dataframe.
-    class frame : public matrix
+    class frame : public matrix<unsigned short>
     {
     private:
         std::vector<std::vector<unsigned short>> graph;
@@ -23,7 +22,9 @@ namespace corona
         void add_node(const node& n) noexcept;
         std::string to_string() const noexcept;
         void create_edge(const node& n1, const node& n2) throw();
-        const std::vector<unsigned short>& operator[](unsigned i) const throw();
+        const std::vector<unsigned short>& operator[](unsigned i) const throw() override;
+        void add_row(const std::vector<unsigned short>& row) override;
+        bool has_edge(const node& n1, const node& n2) const throw();
     };
 }
 
