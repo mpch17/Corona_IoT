@@ -35,7 +35,7 @@ conn conn_listen(conn server_conn)
     else if ((connection.fd = accept(server_conn.fd, (struct sockaddr *) &addr, (socklen_t *) &addr_len)) < 0)
         return ERR_CONN("Failed accepting client", ERR_MSG_LEN);
 
-    return connection;  // TODO: Add client info, such as its address.
+    return connection;
 }
 
 // Initialises endpoint as client or server. Argument ip should be NULL is used for server.
