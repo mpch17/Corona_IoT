@@ -10,6 +10,11 @@ struct camera_env
         uint32_t x, y;  // centimeters.
     } dimension;
 
+    struct loc
+    {
+        float longitude, latitude;
+    } location;
+
     uint32_t people_count;
     uint64_t id;
 };
