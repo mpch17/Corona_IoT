@@ -3,11 +3,16 @@
 namespace corona
 {
     // Constructor.
-    node::node(float longitude, float latitude, unsigned short people_count)
-        : people_count(people_count), longitude(longitude), latitude(latitude)
+    node::node(bool edge, float longitude, float latitude, unsigned short people_count)
+        : edge(edge), people_count(people_count), longitude(longitude), latitude(latitude)
     {}
 
     // Getters.
+    bool node::is_edge() const noexcept
+    {
+        return this->edge;
+    }
+
     const float& node::get_latitude() const noexcept
     {
         return this->latitude;

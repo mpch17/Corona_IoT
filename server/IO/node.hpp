@@ -8,9 +8,11 @@ namespace corona
     private:
         unsigned short people_count;
         float longitude, latitude;
+        bool edge;
 
     public:
-        node(float longitude, float latitude, unsigned short people_count = 0);
+        node(bool edge, float longitude, float latitude, unsigned short people_count = 0);
+        bool is_edge() const noexcept;
         const float& get_latitude() const noexcept;
         const float& get_longitude() const noexcept;
         const unsigned short& get_people_count() const noexcept;
