@@ -78,7 +78,7 @@ namespace corona
     const std::vector<unsigned short>& frame::operator[](unsigned i) const throw()
     {
         if (i >= this->graph.size())
-            throw std::invalid _argument("Index out of bound for graph.");
+            throw std::invalid_argument("Index out of bound for graph.");
 
         return this->graph[i];
     }
@@ -87,5 +87,11 @@ namespace corona
     void frame::add_row(const std::vector<unsigned short>& row)
     {
         throw std::runtime_error("Operation not supported.");
+    }
+
+    // Getter to all nodes.
+    const std::vector<node>& frame::get_nodes() const noexcept
+    {
+        return this->nodes;
     }
 }

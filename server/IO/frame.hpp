@@ -25,6 +25,7 @@ namespace corona
         const std::vector<unsigned short>& operator[](unsigned i) const throw() override;
         void add_row(const std::vector<unsigned short>& row) override;
         bool has_edge(const node& n1, const node& n2) const throw();
+        const std::vector<node>& get_nodes() const noexcept;
     };
 }
 
