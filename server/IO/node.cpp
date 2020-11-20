@@ -8,17 +8,17 @@ namespace corona
     {}
 
     // Getters.
-    float node::get_latitude() const noexcept
+    const float& node::get_latitude() const noexcept
     {
         return this->latitude;
     }
 
-    float node::get_longitude() const noexcept
+    const float& node::get_longitude() const noexcept
     {
         return this->longitude;
     }
 
-    unsigned short node::get_people_count() const noexcept
+    const unsigned short& node::get_people_count() const noexcept
     {
         return this->people_count;
     }
