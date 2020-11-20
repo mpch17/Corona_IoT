@@ -78,7 +78,7 @@ namespace corona
     const std::vector<unsigned short>& frame::operator[](unsigned i) const throw()
     {
         if (i >= this->graph.size())
-            throw std::invalid_argument("Index out of bound for graph.");
+            throw std::invalid _argument("Index out of bound for graph.");
 
         return this->graph[i];
     }
