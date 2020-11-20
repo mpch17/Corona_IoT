@@ -9,9 +9,10 @@ namespace corona
         unsigned short people_count;
         float longitude, latitude;
         bool edge;
+        unsigned long id, edge1, edge2;
 
     public:
-        node(bool edge, float longitude, float latitude, unsigned short people_count = 0);
+        node(unsigned long id, unsigned long edge1_id, unsigned long edge2_id, bool edge, float longitude, float latitude, unsigned short people_count = 0);
         bool is_edge() const noexcept;
         const float& get_latitude() const noexcept;
         const float& get_longitude() const noexcept;

@@ -3,8 +3,8 @@
 namespace corona
 {
     // Constructor.
-    node::node(bool edge, float longitude, float latitude, unsigned short people_count)
-        : edge(edge), people_count(people_count), longitude(longitude), latitude(latitude)
+    node::node(unsigned long id, unsigned long edge1_id, unsigned long edge2_id, bool edge, float longitude, float latitude, unsigned short people_count)
+        : id(id), edge1(edge1_id), edge2(edge2_id), edge(edge), people_count(people_count), longitude(longitude), latitude(latitude)
     {}
 
     // Getters.
