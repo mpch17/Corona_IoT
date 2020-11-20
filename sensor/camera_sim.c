@@ -21,7 +21,7 @@ void load_camera_data(struct camera_env *restrict camera)
 char *camera_env_to_json(struct camera_env ce)
 {
     char *json = malloc(70);
-    sprintf(json, "{node_type: camera, id: %d, people_count: %d, x: %d, y: %d}", ce.id, ce.people_count, ce.dimension.x, ce.dimension.y);
+    sprintf(json, "{\"req_type\": \"POST\", \"node_type\": \"camera\", \"id\": %d, \"people_count\": %d, \"x\": %d, \"y\": %d}", ce.id, ce.people_count, ce.dimension.x, ce.dimension.y);
 
     return json;
 }
