@@ -15,10 +15,13 @@ namespace corona
         std::vector<std::vector<unsigned short>> graph;
         std::vector<node> nodes;
 
-        void for_each_row(void (*mod)(std::vector<unsigned short>& row)) noexcept;
+        template<typename modifier>
+        void for_each_row(modifier func) noexcept;
         short find_node(const node& n) const noexcept;
-        template<typename func>
-        node& find(func pred) throw();
+        template<typename predicate>
+        node& find(predicate pred) throw();
+        void decrement_node_indices(unsigned start_index) noexcept;
+        void check_structure() const throw();
 
     public:
         void add_node(const node& n) throw();
@@ -26,9 +29,12 @@ namespace corona
         void create_edge(const node& n1, const node& n2, unsigned short people_count) throw();
         const std::vector<unsigned short>& operator[](unsigned i) const throw() override;
         void add_row(const std::vector<unsigned short>& row) override;
+        void add_column(const std::vector<unsigned short>& column) override;
+        void delete_row(unsigned index) override;
+        void delete_column(unsigned index) override;
         bool has_edge(const node& n1, const node& n2) const throw();
         const std::vector<node>& get_nodes() const noexcept;
-        void remove_node(float longitude, float latitude) noexcept;
+        void remove_node(const node& n);
     };
 }
 
