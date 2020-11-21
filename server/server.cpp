@@ -94,7 +94,10 @@ void handle_client(const conn& client)
         if (kill)   // Reading thread should be killed, but we'll let it block for now.
         {
             if (!(n == corona::INV_NODE))
+            {
                 std_graph.remove_node(n);
+                max_flow_graph = corona::parse_frame(std_graph);
+            }
 
             break;
         }
