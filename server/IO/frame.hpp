@@ -20,6 +20,7 @@ namespace corona
         short find_node(const node& n) const noexcept;
         template<typename predicate>
         node& find(predicate pred) throw();
+        node& findby_id(unsigned long id) const throw();
         void decrement_node_indices(unsigned start_index) noexcept;
         void check_structure() const throw();
 
@@ -35,6 +36,7 @@ namespace corona
         bool has_edge(const node& n1, const node& n2) const throw();
         const std::vector<node>& get_nodes() const noexcept;
         void remove_node(const node& n);
+        bool has_node(const node& n) const noexcept;
     };
 }
 
