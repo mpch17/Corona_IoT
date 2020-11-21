@@ -1,17 +1,44 @@
 #include "frame.hpp"
 #include <stdexcept>
+#include "../config.hpp"
 
 namespace corona
 {
     // Adds node to graph.
-    void frame::add_node(const node& n) noexcept
+    void frame::add_node(const node& n) throw()
     {
-        this->nodes.push_back(n);
-        for_each_row([](std::vector<unsigned short>& row) {
-            row.push_back(0);
-        });
+        if (n.is_edge())
+        {
+            if (n.get_edge1() >= this->graph.size() || n.get_edge2() >= this->graph.size())
+                throw std::invalid_argument("Edges do not exist in graph.");
 
-        this->graph.push_back(std::vector<unsigned short>(this->nodes.size(), 0));
+            node n1 = find([&n](node& node_arg){ return n.get_edge1() == node_arg.get_id(); });
+            node n2 = find([&n](node& node_arg){ return n.get_edge2() == node_arg.get_id(); });
+            this->graph[n1.get_index()][n2.get_index()] = HALLWAY_CAPACITY - n.get_people_count();
+        }
+
+        else
+        {
+            this->nodes.push_back(n);
+            for_each_row([](std::vector<unsigned short>& row) {
+                row.push_back(0);
+            });
+
+            this->graph.push_back(std::vector<unsigned short>(this->nodes.size(), 0));
+        }
+    }
+
+    // Finds node given predicate.
+    template<typename func>
+    node& frame::find(func pred) throw()
+    {
+        for (unsigned i = 0; i < this->nodes.size(); i++)
+        {
+            if (pred(this->nodes[i]))
+                return this->nodes[i];
+        }
+
+        throw std::invalid_argument("No node found.");
     }
 
     // Iterates over all row in graph.
@@ -41,14 +68,14 @@ namespace corona
     }
 
     // Creates an edge between two nodes found by their longitude and latitude.
-    void frame::create_edge(const node& n1, const node& n2) throw()
+    void frame::create_edge(const node& n1, const node& n2, unsigned short people_count) throw()
     {
         short n1_idx = find_node(n1), n2_idx = find_node(n2);
 
         if (n1_idx < 0 || n2_idx < 0)
             throw std::invalid_argument("No nodes with longitude and latitude found.");
 
-        this->graph[n1_idx][n2_idx] = 1;
+        this->graph[n1_idx][n2_idx] = people_count;
     }
 
     // Finds node by longitude and latitude. Returns -1 if not found.
@@ -71,7 +98,7 @@ namespace corona
         if (n1_idx < 0 || n2_idx < 0)
             throw std::invalid_argument("No nodes with longitude and latitude found.");
 
-        return this->graph[n1_idx][n2_idx] == 1;
+        return this->graph[n1_idx][n2_idx] > 0;
     }
 
     // Accesses a row in adjacency matrix (graph).
@@ -93,5 +120,12 @@ namespace corona
     const std::vector<node>& frame::get_nodes() const noexcept
     {
         return this->nodes;
+    }
+
+    // Removes node from graph.
+    // Handled differently if edge.
+    void frame::remove_node(float longitude, float latitude) noexcept
+    {
+
     }
 }

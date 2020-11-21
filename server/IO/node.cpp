@@ -3,14 +3,37 @@
 namespace corona
 {
     // Constructor.
-    node::node(unsigned long id, unsigned long edge1_id, unsigned long edge2_id, bool edge, float longitude, float latitude, unsigned short people_count)
-        : id(id), edge1(edge1_id), edge2(edge2_id), edge(edge), people_count(people_count), longitude(longitude), latitude(latitude)
+    node::node(bool edge, float longitude, float latitude, unsigned long id,
+                int node_index, unsigned long edge1_id, unsigned long edge2_id,
+                unsigned short people_count)
+        : id(id), node_index(node_index), edge1(edge1_id), edge2(edge2_id), edge(edge),
+            people_count(people_count), longitude(longitude), latitude(latitude)
     {}
 
     // Getters.
+    int node::get_index() const noexcept
+    {
+        return this->node_index;
+    }
+
+    unsigned long node::get_id() const noexcept
+    {
+        return this->id;
+    }
+
     bool node::is_edge() const noexcept
     {
         return this->edge;
+    }
+
+    unsigned long node::get_edge1() const noexcept
+    {
+        return this->edge1;
+    }
+
+    unsigned long node::get_edge2() const noexcept
+    {
+        return this->edge2;
     }
 
     const float& node::get_latitude() const noexcept
@@ -29,6 +52,11 @@ namespace corona
     }
 
     // Setters.
+    void node::set_index(int index) noexcept
+    {
+        this->node_index = index;
+    }
+
     void node::set_people_count(unsigned short count) noexcept
     {
         this->people_count = count;
