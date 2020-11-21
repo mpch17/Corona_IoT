@@ -27,7 +27,11 @@ namespace corona
         void set_index(int index) noexcept;
         void set_people_count(unsigned short count) noexcept;
         void increment_people_count(unsigned short increment) noexcept;
+        bool operator==(const node& n) const noexcept;
     };
+
+    // Invalid node.
+    node INV_NODE(false, -1, -1, 0);
 }
 
 #endif
