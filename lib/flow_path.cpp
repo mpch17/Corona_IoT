@@ -4,7 +4,7 @@
 using namespace std;
 
 // A special BFS version that returns true if there's a path from source to sink.
-static bool BFS(vector< vector<int> > &resAdjMatrix, int &source, int &sink, vector<int> &parent)
+static bool BFS(vector< vector<int> > &resAdjMatrix, const int &source, const int &sink, vector<int> &parent)
 {
     // Create an array for all nodes we visited. Initialized to false.
     int n = resAdjMatrix.size();
@@ -49,7 +49,7 @@ static bool BFS(vector< vector<int> > &resAdjMatrix, int &source, int &sink, vec
 }
 
 // Use the Ford Fulkerson algorithm. Return the max flow.
-pair<vector<int>, int> FordFulkerson(vector< vector<int> > &adjMatrix, int &source, int &sink)
+pair<vector<int>, int> FordFulkerson(vector< vector<int> > &adjMatrix, const int &source, const int &sink)
 {
     int maxflow = 0;
 
