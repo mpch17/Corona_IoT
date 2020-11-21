@@ -66,4 +66,18 @@ namespace corona
     {
         this->people_count += increment;
     }
+
+    // Equality operator.
+    bool node::operator==(const node& n) const noexcept
+    {
+        return n.people_count == this->people_count &&
+            n.longitude == this->longitude &&
+            n.latitude == this->latitude &&
+            n.edge == this->edge &&
+            n.id == this->id &&
+            n.edge1 == this->edge1 &&
+            n.edge2 == this->edge2 &&
+            n.node_index == this->node_index &&
+            n.value == this->value;
+    }
 }
