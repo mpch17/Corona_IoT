@@ -9,13 +9,16 @@ namespace corona
     {
         check_structure();
 
-        if (n.is_edge())
+        if (has_node(n))
+            return;
+
+        else if (n.is_edge())
         {
             if (n.get_edge1() >= this->graph.size() || n.get_edge2() >= this->graph.size())
                 throw std::invalid_argument("Edges do not exist in graph.");
 
-            node n1 = find([&n](node& node_arg){ return n.get_edge1() == node_arg.get_id(); });
-            node n2 = find([&n](node& node_arg){ return n.get_edge2() == node_arg.get_id(); });
+            node n1 = findby_id(n.get_edge1());
+            node n2 = findby_id(n.get_edge2());
             this->graph[n1.get_index()][n2.get_index()] = HALLWAY_CAPACITY - n.get_people_count();
         }
 
@@ -34,10 +37,10 @@ namespace corona
     template<typename predicate>
     node& frame::find(predicate pred) throw()
     {
-        for (unsigned i = 0; i < this->nodes.size(); i++)
+        for (node& n : this->nodes)
         {
-            if (pred(this->nodes[i]))
-                return this->nodes[i];
+            if (pred(n))
+                return n;
         }
 
         throw std::invalid_argument("No node found.");
@@ -193,4 +196,37 @@ namespace corona
         else if (this->graph.size() != this->nodes.size())
             throw std::runtime_error("The number of stored nodes does not match the number of nodes in graph.");
     }
+
+    // Checks whether node (vertex or edge) exists.
+    bool frame::has_node(const node& n) const noexcept
+    {
+        try
+        {
+            if (n.is_edge())
+            {
+                node n1 = findby_id(n.get_edge1());
+                node n2 = findby_id(n.get_edge2());
+
+                return this->graph[n1.get_index()][n2.get_index()] > 0;
+            }
+
+            else
+            {
+                node found = findby_id(n.get_id());
+                return true;
+            }
+        }
+
+        catch (const std::invalid_argument& exc)
+        {
+                return false;
+        }
+    }
+
+    // Finds node by ID.
+    inline node& frame::findby_id(unsigned long id) const throw()
+    {
+        return find([&id](const node& n){ return n.get_id() == id; });
+    }
 }
+
