@@ -198,7 +198,7 @@ namespace corona
     }
 
     // Checks whether node (vertex or edge) exists.
-    bool frame::has_node(const node& n) const noexcept
+    bool frame::has_node(const node& n) noexcept
     {
         try
         {

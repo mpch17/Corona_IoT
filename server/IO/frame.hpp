@@ -36,7 +36,7 @@ namespace corona
         bool has_edge(const node& n1, const node& n2) const throw();
         const std::vector<node>& get_nodes() const noexcept;
         void remove_node(const node& n);
-        bool has_node(const node& n) const noexcept;
+        bool has_node(const node& n) noexcept;
     };
 }
 
