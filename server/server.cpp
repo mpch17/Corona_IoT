@@ -23,7 +23,8 @@ void handle_client(const conn& client);
 void json2node(corona::node& n, const std::string str);
 void handle_message(const conn& client, const std::string message);
 void store_data(const json& j);
-json read_data();
+json read_data(const int& source, const int& sink);
+std::vector<std::pair<unsigned long, unsigned short>> node_values();
 
 // Graphs.
 corona::frame std_graph;
@@ -128,7 +129,7 @@ void handle_message(const conn& client, const std::string message)
 
     else
     {
-        std::string json_str = read_data().dump();
+        std::string json_str = read_data(0, 0).dump();
         conn_write(client, json_str.c_str(), json_str.size());
     }
 }
@@ -154,9 +155,30 @@ void store_data(const json& j)
 
 // Reads data.
 // Data is maximum flow path result.
-json read_data()
+json read_data(const int& source, const int& sink)
 {
-    // TODO: Compute path.
-    // TODO: Remember to use mutex lock.
-    // TODO: Return not only flow path, but also all data in std_graph so app can see number of people in each room.
+    graph_mtx.lock();
+    max_flow_graph.compute_path(source, sink);
+
+    json j;
+    j["max_flow"] = max_flow_graph.get_flow().second;
+    j["path"] = max_flow_graph.get_flow().first;
+    j["node_values"] = node_values();
+
+    graph_mtx.unlock();
+    return j;
+}
+
+// Returns std::vector of pairs, where key is node ID and value is people count.
+std::vector<std::pair<unsigned long, unsigned short>> node_values()
+{
+    std::vector<std::pair<unsigned long, unsigned short>> values;
+    std::vector<corona::node> nodes = std_graph.get_nodes();
+
+    for (corona::node n : nodes)
+    {
+        values.push_back(std::pair<unsigned long, unsigned short>(n.get_id(), n.get_people_count()));
+    }
+
+    return values;
 }
