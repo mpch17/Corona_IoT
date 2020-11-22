@@ -3,8 +3,8 @@
 namespace corona
 {
     // Constructor.
-    frame_io_read::frame_io_read(const std::istream* instream)
-        : input(instream)
+    frame_io_read::frame_io_read(const std::istream* instream, const std::string& filename)
+        : input(instream), frame_io(filename)
     {
 
     }
@@ -14,4 +14,22 @@ namespace corona
     {
 
     }
+
+    // Open file.
+    void frame_io_read::open()
+    {
+
+    }
+
+    // Closes file.
+    void frame_io_read::close()
+    {
+
+    }
+
+    // Reads and parses frame.
+//    frame frame_io_read::read() const
+//    {
+
+//    }
 }
