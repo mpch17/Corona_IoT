@@ -25,6 +25,7 @@ void handle_message(const conn& client, const std::string message);
 void store_data(const json& j);
 json read_data(const int& source, const int& sink);
 std::vector<std::pair<unsigned long, unsigned short>> node_values();
+std::pair<unsigned long, unsigned long> read_source_sink(const std::string& str);
 
 // Graphs.
 corona::frame std_graph;
@@ -129,6 +130,7 @@ void handle_message(const conn& client, const std::string message)
 
     else
     {
+        std::pair<unsigned long, unsigned long> ss = read_source_sink(message);
         std::string json_str = read_data(0, 0).dump();
         conn_write(client, json_str.c_str(), json_str.size());
     }
@@ -181,4 +183,21 @@ std::vector<std::pair<unsigned long, unsigned short>> node_values()
     }
 
     return values;
+}
+
+// Retreives HTTP headers for source and sink in graph.
+// Key and value are both 0 if argument is unpassable.
+std::pair<unsigned long, unsigned long> read_source_sink(const std::string& str)
+{
+    std::pair<unsigned long, unsigned long> ss;
+    std::size_t source_pos = str.find("edge1");
+    std::size_t sink_pos = str.find("edge2");
+
+    if (source_pos == std::string::npos || sink_pos == std::string::npos)
+        return std::pair<unsigned long, unsigned long>(0, 0);
+
+    ss.first = stoul(str.substr(source_pos + 2, str.find_first_of("\r", source_pos + 2) - (source_pos + 2)));
+    ss.second = stoul(str.substr(sink_pos + 2, str.find_first_of("\r", sink_pos + 2) - (sink_pos + 2)));
+
+    return ss;
 }
