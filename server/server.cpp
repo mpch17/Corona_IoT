@@ -67,7 +67,7 @@ void handle_client(const conn& client)
 {
     using namespace std::chrono;
 
-    corona::node n = corona::INV_NODE;
+    corona::node n = corona::invalid_node_t();
     std::string msg = "";
     auto timer = std::chrono::high_resolution_clock::now();
     bool kill = false;
@@ -95,7 +95,7 @@ void handle_client(const conn& client)
 
         if (kill)   // Reading thread should be killed, but we'll let it block for now.
         {
-            if (!(n == corona::INV_NODE))
+            if (!(n == corona::node(corona::invalid_node_t())))
             {
                 std_graph.remove_node(n);
                 max_flow_graph = corona::parse_frame(std_graph);
