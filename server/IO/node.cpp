@@ -3,6 +3,12 @@
 namespace corona
 {
     // Constructor.
+    node::node(const invalid_node_t& in)
+    {
+        this->invalid = true;
+    }
+
+    // Constructor.
     node::node(bool edge, float longitude, float latitude, unsigned long id,
                 int node_index, unsigned long edge1_id, unsigned long edge2_id,
                 unsigned short people_count)
@@ -70,6 +76,9 @@ namespace corona
     // Equality operator.
     bool node::operator==(const node& n) const noexcept
     {
+        if (this->invalid && n.invalid)
+            return true;
+
         return n.people_count == this->people_count &&
             n.longitude == this->longitude &&
             n.latitude == this->latitude &&

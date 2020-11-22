@@ -3,6 +3,11 @@
 
 namespace corona
 {
+    struct invalid_node_t
+    {
+        invalid_node_t() {}
+    };
+
     class node
     {
     private:
@@ -11,8 +16,10 @@ namespace corona
         bool edge;
         unsigned long id, edge1, edge2;
         int node_index, value;
+        bool invalid;
 
     public:
+        node(const invalid_node_t& inv);
         node(bool edge, float longitude, float latitude, unsigned long id,
             int node_index = -1, unsigned long edge1_id = 0, unsigned long edge2_id = 0,
             unsigned short people_count = 0);
@@ -29,9 +36,6 @@ namespace corona
         void increment_people_count(unsigned short increment) noexcept;
         bool operator==(const node& n) const noexcept;
     };
-
-    // Invalid node.
-    node INV_NODE(false, -1, -1, 0);
 }
 
 #endif
