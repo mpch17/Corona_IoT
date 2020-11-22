@@ -20,7 +20,7 @@ namespace corona
         short find_node(const node& n) const noexcept;
         template<typename predicate>
         node& find(predicate pred) throw();
-        node& findby_id(unsigned long id) const throw();
+        node& findby_id(const unsigned long& id) throw();
         void decrement_node_indices(unsigned start_index) noexcept;
         void check_structure() const throw();
 

@@ -224,7 +224,7 @@ namespace corona
     }
 
     // Finds node by ID.
-    inline node& frame::findby_id(unsigned long id) const throw()
+    inline node& frame::findby_id(const unsigned long& id) throw()
     {
         return find([&id](const node& n){ return n.get_id() == id; });
     }
