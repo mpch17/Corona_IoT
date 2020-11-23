@@ -1,2 +1,4 @@
 #define HALLWAY_CAPACITY 15
 #define ROOM_THRESHOLD 100
+
+#define LOG 1

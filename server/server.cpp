@@ -51,13 +51,20 @@ void clients_listen(const conn& server)
     {
         conn connection = conn_listen(server);
 
+#if LOG
+        std::cout << "Client connected." << std::endl;
+#endif
+
         if (connection.error)
         {
+#if LOG
             std::cerr << connection.error_msg << std::endl << std::endl;
+#endif
             continue;
         }
 
         std::thread client_thread([&connection]() { handle_client(connection); });
+        client_thread.join();
     }
 }
 
@@ -74,8 +81,8 @@ void handle_client(const conn& client)
     std::thread reader([&msg, &kill, &client]() {
         while (!kill)   // kill does not necessarily kill this thread. If kill = false and client disconnects, then conn_read() will block forever.
         {
-            char* buffer = new char[100];
-            conn_read(client, buffer, 100);
+            char* buffer = new char[1000];
+            conn_read(client, buffer, 1000);
 
             while (!msg.empty());
             msg = buffer;
@@ -116,13 +123,20 @@ void handle_client(const conn& client)
 // Attempts to parse JSON string into node instance.
 void json2node(corona::node& n, const std::string str)
 {
-
+    json j = json::parse(str.c_str());
+    n = corona::node((bool) j["is_hallway"], (float) j["longitude"], (float) j["latitude"],
+                    (unsigned long) j["id"], (int) j["index"], (unsigned long) j["edge1"],
+                    (unsigned long) j["edge2"], (unsigned short) j["people_count"]);
 }
 
 // Either saves or incoming message or responds with saved data depending on client type.
 // If IoT node, save data received. If it's from the app, send the latest saved data.
 void handle_message(const conn& client, const std::string message)
 {
+#if LOG
+    std::cout << "Message: " << message << std::endl;
+#endif
+
     json jstr = json::parse(message.c_str());
 
     if (std::string(jstr["req_type"]).compare("POST") == 0)
