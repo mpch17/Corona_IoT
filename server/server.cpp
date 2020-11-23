@@ -76,7 +76,7 @@ void handle_client(const conn& client)
 
     corona::node n = corona::invalid_node_t();
     std::string msg = "";
-    auto timer = std::chrono::high_resolution_clock::now();
+    auto timer = high_resolution_clock::now();
     bool kill = false;
     std::thread reader([&msg, &kill, &client]() {
         while (!kill)   // kill does not necessarily kill this thread. If kill = false and client disconnects, then conn_read() will block forever.
@@ -98,6 +98,8 @@ void handle_client(const conn& client)
 
             if (elapsed_time.count() >= TIME2DEATH)
                 kill = true;
+
+            timer = high_resolution_clock::now();
         }
 
         if (kill)   // Reading thread should be killed, but we'll let it block for now.
@@ -114,7 +116,6 @@ void handle_client(const conn& client)
         else
         {
             handle_message(client, msg);
-            json2node(n, msg);
             msg = "";
         }
     }
