@@ -17,6 +17,7 @@ struct camera_env
 
     uint32_t people_count;
     uint64_t id;
+    uint32_t index;
     uint64_t edge_end1, edge_end2;
 };
 

@@ -6,12 +6,15 @@
 
 #define TRANSMIT_FREQ 10
 #define SERVER_IP "127.0.0.1"
-#define SERVER_PORT 48555
+#define SERVER_PORT 48677
 
 int main()
 {
     struct camera_env image;
     conn server = endpoint_init(SERVER_IP, SERVER_PORT, CLIENT);
+
+    if (server.error)
+        return 1;
 
     while (1)
     {
