@@ -19,6 +19,7 @@ using json = nlohmann::json;
 
 // Prototypes.
 void clients_listen(const conn& server);
+void join_threads(std::vector<std::thread>& threads);
 void handle_client(const conn& client);
 void json2node(corona::node& n, const std::string str);
 void handle_message(const conn& client, const std::string message);
@@ -47,6 +48,8 @@ int main()
 // Runs forever, so run this is a separate thread.
 void clients_listen(const conn& server)
 {
+    std::vector<std::thread> threads;
+
     while (true)
     {
         conn connection = conn_listen(server);
@@ -63,8 +66,18 @@ void clients_listen(const conn& server)
             continue;
         }
 
-        std::thread client_thread([&connection]() { handle_client(connection); });
-        client_thread.join();
+        threads.push_back(std::thread([&connection]() { handle_client(connection); }));
+    }
+
+    join_threads(threads);
+}
+
+// Joins all threads in vector.
+void join_threads(std::vector<std::thread>& threads)
+{
+    for (unsigned i = 0; i < threads.size(); i++)
+    {
+        threads[i].join();
     }
 }
 
