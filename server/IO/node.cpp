@@ -13,7 +13,7 @@ namespace corona
                 int node_index, unsigned long edge1_id, unsigned long edge2_id,
                 unsigned short people_count)
         : id(id), node_index(node_index), edge1(edge1_id), edge2(edge2_id), edge(edge),
-            people_count(people_count), longitude(longitude), latitude(latitude)
+            people_count(people_count), longitude(longitude), latitude(latitude), invalid(false)
     {}
 
     // Getters.
