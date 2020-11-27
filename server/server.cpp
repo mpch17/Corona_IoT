@@ -4,6 +4,7 @@
 #include <map>
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <chrono>
 #include <ratio>
 #include <ctime>
@@ -19,6 +20,7 @@ using json = nlohmann::json;
 
 // Prototypes.
 void clients_listen(const conn& server);
+void clean_thread_vector(std::vector<std::thread>& threads);
 void join_threads(std::vector<std::thread>& threads);
 void handle_client(const conn& client);
 void json2node(corona::node& n, const std::string str);
@@ -72,6 +74,19 @@ void clients_listen(const conn& server)
     join_threads(threads);
 }
 
+// Forever checks for unjoinable threads in vector of threads that can be removed.
+void clean_thread_vector(std::vector<std::thread>& threads)
+{
+    while (true)
+    {
+        for (unsigned i = 0; i < threads.size(); i++)
+        {
+            if (!threads[i].joinable())
+                threads.erase(threads.begin() + i);
+        }
+    }
+}
+
 // Joins all threads in vector.
 void join_threads(std::vector<std::thread>& threads)
 {
@@ -89,9 +104,9 @@ void handle_client(const conn& client)
 
     corona::node n = corona::invalid_node_t();
     std::string msg = "";
-    auto timer = high_resolution_clock::now();
+    auto timer = system_clock::now();
     bool kill = false;
-    std::thread reader([&msg, &kill, &client]() {
+    std::thread reader([&msg, &kill, &client, &timer]() {
         while (!kill)   // kill does not necessarily kill this thread. If kill = false and client disconnects, then conn_read() will block forever.
         {
             char* buffer = new char[1000];
@@ -100,19 +115,20 @@ void handle_client(const conn& client)
             while (!msg.empty());
             msg = buffer;
             delete[] buffer;
+
+            if (strlen(buffer) > 0)
+                timer = system_clock::now();
         }
     });
 
-    while (true)
+    while (!kill)
     {
         while (msg.empty() && !kill)
         {
-            duration<double> elapsed_time = duration_cast<duration<double>>(high_resolution_clock::now() - timer);
+            duration<double> elapsed_time = system_clock::now() - timer;
 
             if (elapsed_time.count() >= TIME2DEATH)
                 kill = true;
-
-            timer = high_resolution_clock::now();
         }
 
         if (kill)   // Reading thread should be killed, but we'll let it block for now.
@@ -121,6 +137,9 @@ void handle_client(const conn& client)
             {
                 std_graph.remove_node(n);
                 max_flow_graph = corona::parse_frame(std_graph);
+#if LOG
+                std::cout << "Node " << n.get_id() << " died." << std::endl;
+#endif
             }
 
             break;
@@ -128,6 +147,7 @@ void handle_client(const conn& client)
 
         else
         {
+            json2node(n, msg);
             handle_message(client, msg);
             msg = "";
         }
@@ -138,9 +158,11 @@ void handle_client(const conn& client)
 void json2node(corona::node& n, const std::string str)
 {
     json j = json::parse(str.c_str());
-    n = corona::node((bool) j["is_hallway"], (float) j["longitude"], (float) j["latitude"],
-                    (unsigned long) j["id"], (int) j["index"], (unsigned long) j["edge1"],
-                    (unsigned long) j["edge2"], (unsigned short) j["people_count"]);
+
+    if (std::string(j["req_type"]).compare("POST") == 0)
+        n = corona::node((bool) j["is_hallway"], (float) j["longitude"], (float) j["latitude"],
+                        (unsigned long) j["id"], (int) j["index"], (unsigned long) j["edge1"],
+                        (unsigned long) j["edge2"], (unsigned short) j["people_count"]);
 }
 
 // Either saves or incoming message or responds with saved data depending on client type.
