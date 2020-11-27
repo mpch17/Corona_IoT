@@ -79,6 +79,9 @@ namespace corona
         if (this->invalid && n.invalid)
             return true;
 
+        else if (this->invalid != n.invalid)
+            return false;
+
         return n.people_count == this->people_count &&
             n.longitude == this->longitude &&
             n.latitude == this->latitude &&
